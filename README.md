@@ -39,7 +39,15 @@ A state in game AI is the representation of some flow of logic or behaviour that
 **Q: What happens if we forget to use % waypoints.Length when incrementing the index?**
 
 **A:**
-- We will eventually try to access the array with an out of range index, and an error will be thrown.
+- We would eventually try to access the array with an out of range index, and an error will be thrown.
 
+## FSM Diagram ##
+<img width="330" height="471" alt="image" src="https://github.com/user-attachments/assets/5d134577-ee33-4ace-8c65-6cd5cbd18936" />
 
+**Q: What would the code look like if you did not have an enum and tried to manage states with only booleans like *isPatrolling*, *isChasing*? Why might that be harded to maintain?**
+
+**A:** It would require the consistent addition of state checks in every if statement related to a state transition. If I add any kind of state as a feature, then each pre-existing state logic would have to implement a check to see whether or not this new state is active or not, depending on what kind of state transition overlap you want. This would be incredibly cumbersome, and error prone, as you would have to edit code in an increasing multitude of places. Each feature implementation would have the undeninable side effect of introducing bugs. It also wouldn't be very maintanable, depending on the scale of the program.
+
+### Example ###
+Let's say that we can only chase if we are not patrolling. That's fine. But, if we introduce the state "ReturnToPatrol", then we would most likely have to introduce a check to gauge the current state of this "ReturnToPatrol" state before we can initiate our chase. Likewise, the "ReturnToPatrol" state would potentially have to check if we're either already patrolling, or if we are chasing. And this type of state-checking would increase for every state we introduce.
 
