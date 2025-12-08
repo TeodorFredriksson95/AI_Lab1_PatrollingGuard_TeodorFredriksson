@@ -51,3 +51,42 @@ A state in game AI is the representation of some flow of logic or behaviour that
 ### Example ###
 Let's say that we can only chase if we are not patrolling. That's fine. But, if we introduce the state "ReturnToPatrol", then we would most likely have to introduce a check to gauge the current state of this "ReturnToPatrol" state before we can initiate our chase. Likewise, the "ReturnToPatrol" state would potentially have to check if we're either already patrolling, or if we are chasing. And this type of state-checking would increase for every state we introduce.
 
+**Q: Briefly exlain your FSM states and transitions**
+
+**A:**
+
+The FSM states are the following;
+- *Patroling* - The enemy patrols between a number of checkpoints assigned via the Unity editor. It does so sequentially (no randomness implemented). Upon reaching the last checkpoint, a modulus operator is used to loop back to the first checkpoint. 
+- *Chasing* - When the enemy spots a player inside it's field of view, or if the player enters the enemies aggro radius, it updates its "SetDestination()" call to reference the player position. 
+- *Investigating* - If the enemy loses sight of the player, it moves to the last known location of the player. After a 5 second delay (editable via editor), it returns to it's previous checkpoint patrol destination. 
+- *ReturnToPatrol* - If the player runs out of aggro range, the enemy abandons chase and returns to it's last known checkpoint destination. 
+
+**Q: Point to the part of your code where the state change happens.**
+
+**A:**
+- *Patroling* - ```    public GuardState currentState = GuardState.Patrolling; ```
+- *Chasing* - ``` if (distance <= aggroRadius) { currentState = GuardState.Chasing; } if (CanSeePlayer()) currentState = GuardState.Chasing;   ```
+  
+- *Investigating* -  ```
+  if (!CanSeePlayer())
+        {
+            if (dropAggroCount >= dropAggroTime)
+            {
+                currentState = GuardState.Investigate;
+                dropAggroCount = 0f;
+            }
+            dropAggroCount += Time.deltaTime;
+        }
+  ```
+- *ReturnToPatrol* - ```         if (distanceToLastKnown < 0.5f)
+        {
+            investigationCounter += Time.deltaTime;
+
+            if (investigationCounter >= InvestigationTime)
+            {
+                investigationCounter = 0f;
+                currentState = GuardState.ReturningToPatrol;
+            }
+        }   ```
+
+
