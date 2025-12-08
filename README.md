@@ -4,4 +4,4 @@ The purpose of this README is primarily to document my progress related to the a
 
 ## Q&A
 **Q: What coordinate axes respond to “forward” and “up” in Unity?**
-**A: '- "up" relates to the Y-coordinate in 3D world space. It's considered a shorthand for *Vector3(0, 1, 0)*. 
+**A:** '- "up" relates to the Y-coordinate in 3D world space. It's considered a shorthand for *Vector3(0, 1, 0)*. 
