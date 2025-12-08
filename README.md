@@ -4,12 +4,17 @@ The purpose of this README is primarily to document my progress related to the a
 
 ## Research ##
 1. In your own words, what is a state in game AI? Give two examples.
-- 
+A state in game AI is the representation of some flow of logic or behaviour that exists within a specific boundary.
+### Examples ###
+- A player flying through the air.
+- A player ducking under a fallen log.
 3. What triggers a transition between states? Give two examples.
-- 
-4. Why do you think game AI often uses simple techniques (FSMs) instead of “real AI”
-like deep learning?
-- 
+- What triggers a transition is up to the author. The trigger can be virtually anything. It's up to you to define the ruleset where each trigger is responsible for a different outcome.
+### Examples ###
+- While an enemy AI has a player in field of view and is within range, the enemy AI will chase and attempt to attack the player. In this scenario, there are two conditions: the field of view, and the range.
+- While a player is considered to be falling (state), an falling animation might play. When the player hits the ground, the falling animation transitions to one where the player is standing (state). In this the scenario, the transition could be triggered based on a boolean value that indicates whether the player is falling or not.
+4. Why do you think game AI often uses simple techniques (FSMs) instead of “real AI” like deep learning?
+- Because "real AI" is incredibly costly and complex, requiring huge amounts of computational power in order to perform their service. As far as I understand, the goal game AI is to create a believable appearance of "smart" AI capabilities, whether or not the "smartness" actually exists. I would dare guess that "real AI" has to take into account the possibility for a more extensive range of possibilites, while games would have an easier time to limit the potential interactions and thus expectations from the player. This would remove the need for creating overly complex and versatile AI. Also, simple techniques often have the benefit of being maintanable, which is very positive in a development context. 
 
 ## Q&A
 **Q: What coordinate axes respond to “forward” and “up” in Unity?**
