@@ -7,18 +7,22 @@ Describe what a grid tile represents as a node, and what connections between til
 
 **Answer:**  
 ---
+- In this scenario, the node is the tile, and the edge is boolean that determines whether or not the tile is walkable.
+- The grid tiles each represent a specific walkable or unwalkable area. Based on the neighbouring relationship between the tiles (tile direction or octagonal direction), the boolean ``` walkable ``` represents the edge between the tiles.
 
 ### 2. How does the grid coordinate `(x, y)` map to world position `(x * cellSize, z * cellSize)`?
 Explain the relationship between the grid indices and Unity world positions.
 
 **Answer:**  
 ---
+- Since we iterate over the grids rows and columns using ``` new Vector3(x * cellSize, 0, z * cellSize) ``` will give us a world position that is easily translatable to a 2-dimensional grid. For example, if we are currently iterating over (column 3, row 4), we will receive a world position equivalent to ``` new Vector3(3, 0, 4) ```.This makes it easy for us to instantiate the tiles in a grid-like fashion.
 
 ### 3. What happens if you try to access `nodes[x, y]` with coordinates outside the array bounds?
 How can you prevent errors when accessing nodes?
 
 **Answer:**  
 ---
+- Since we're using an if-statement to determine whether or not the specified index is within the ranges of the grid's width and height, I would say that we are properly preventing attempts to access nodes that are out of bounds. If we attempt such a thing, we will receive a null value, which I think is relevant to the function.
 
 ## 1.2 Walkability & Toggling Tiles
 
@@ -26,19 +30,23 @@ How can you prevent errors when accessing nodes?
 Explain how raycasting detects which tile is clicked.
 
 **Answer:**  
----
+--- The function we're using is ``` ScreenPointToRay(Vector3 pos) ```, a helper function part of the Camera class. The full line of code is:
+``` Ray ray = cam.ScreenPointToRay(Mouse.current.position.ReadValue()); ```
+Here we are using the ``` Vector2 ``` return value from the mouse position, which gets implicitly converted to a ```Vector3```, which we're then passing as argument to the ```ScreenPointToRay``` function, which in turn returns a ```Ray``` object. The ray has it's origin in the near plane of the camera, and goes through the (x, y) pixel coordinates determined by the mouse click.
 
 ### 5. Why is it useful to visualize walkable vs non-walkable tiles?
 What does this help you understand when debugging the grid or pathfinding?
 
 **Answer:**  
 ---
+- Visual representation of logic is always helpful as it gives a different perspective of the actual outcome. Visualizing a grid of say, 150x150, and trying to step through the entire algorithmic calculation which led you to a specific pixel only using your mind's inner eye can be quite taxing, and I would say you'd have to be a wonder child in order to do that properly. Different tools for debugging helps us as developers to narrow down problems, and different types of debugger tools helps us engage more of our brain capacity. In this case, a visual aid is very helpful in mapping out the algorithmic process.
 
 ### 6. In graph terms, what does toggling a tile to a wall represent?
 How does changing a tile’s walkability affect the node and its edges?
 
 **Answer:**  
 ---
+- Toggling a tile represents the removal and addition of edges between a set of nodes. A set of tiles are considered walkable if an edge exists between them, which in this case is represented by the boolean member ```walkable```.
 
 ## 1.3 A* Pathfinding
 
