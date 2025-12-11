@@ -55,28 +55,38 @@ Identify where in the algorithm each of these values is updated.
 
 **Answer:**  
 ---
+- We update these values in a number of places;
+  - In the Node constructor, we set the default values for hCost and gCost.
+  - The hCost and gCost values of each node gets reset in the beginning of the FindPath function.
+  - Then we set the gCost to 0 for the starting node (since it takes 0 steps to move to the location where the object is currently at)
+  - Then we set the heuristic (hCost) value to the sum of the absolute values of the start and target node components respectively.
+  - As we iterate over the neighbouring nodes, we increment their gCost by the current nodes gCost + 1.
 
 ### 8. Why do we check `tentativeG < neighbour.gCost`?
 Explain why this comparison is necessary when exploring neighbours.
 
 **Answer:**  
 ---
+- We compare the gCosts because we might've found a better (cheaper) route than the one we previously were on. If this new route is cheaper than the previous one, then this would have a direct impact on the gCost of the node, since the gCost represents the step cost from our starting node to the currently selected node.
 
 ### 9. What happens if your heuristic overestimates the true distance?
 How does it affect the correctness of the path found by A*?
 
 **Answer:**  
 ---
+- If the heuristic cost overestimates the true distance, then the heuristic is consider inadmissable. if we take this key calculation into consideration: ´´´ f(n) = g(n) + h(n) ```, and h(n) is an overestimate, then the algorithm might skip exploring a node that is actually the conceptually correct one, because the algorithm may think that the node is more expensive than it is. This can lead to a sub-optimal or simply incorrect path calculation.
 
 ### 10. If you set `h(n) = 0` for all nodes, what classic algorithm does A* become?
 
 **Answer:**  
 ---
+- Dijkstra's algorithm: expands search based on the cheapeast travelled distance from start.
 
 ### 11. If you ignore `g(n)` completely and only sort by `h(n)`, what behavior do you expect to see?
 
 **Answer:**  
 ---
+- Greedy first-best search: Expands search based on the node that appears to be closest to the target.
 
 ## 1.4 Agent Movement
 
@@ -84,12 +94,15 @@ How does it affect the correctness of the path found by A*?
 
 **Answer:**  
 ---
+- Computing a path is equivalent to searching through a graph in order to find out the sequence of nodes that connects one node to another.
+- Moving along a path is the execution of updating the position of an object, following the sequence of nodes determined by the calculated path.
 
 ### 13. What happens in your movement code if there is no valid path (FindPath returns null)?
 How should this case be handled?
 
 **Answer:**  
 ---
+- Nothing happens. Currently the code returns "null" if a path isn't found. We could use this result to trigger some other kind of behaviour, such as an investigation state which would be defined as part of a finite state machine. Ultimately how this case is handled is up to what kind of behaviour you as the author would like to see. A default state could be to return to a know patrol point, and then execute a patrol sequence from there.
 
 ## 1.5 Dynamic Targets
 
@@ -98,12 +111,14 @@ What trade-offs appear?
 
 **Answer:**  
 ---
+- There is no fixed rule in regards to how often you *should* recompute. More frequent recomputes would require more computational power. More frequent recomputes could mean that your AI appears to be more responsive, at the cost of computation power. Put the other way around, less frequent updates *could* mean less responsive AI behaviour. Or, to be more specific - The AI would by defintion be less responsive, but if this reduction in responsiveness is actually noticable to the player is an entirely different thing.
 
 ### 15. What happens if the player moves into a location that is currently unreachable due to walls?
 How could you detect and handle that?
 
 **Answer:**  
 ---
+- This scenario would be caught by the fact that unless we find a valid sequence of nodes from the start node to the target node (player) we return a null value. What happens next depends on what you want to happen in this scenario. You could check if the NPC still has vision of the target, even if it can't reach it. If so, the NPC could be triggered to start using ranged attacks for example.
 
 ## 1.6 Reflection & Theory
 
